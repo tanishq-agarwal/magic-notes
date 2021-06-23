@@ -2,3 +2,4 @@ The project is about “Note Taking Website App Using Pure JavaScript.” We all
 
 The website which I have build looks like the following image:
 
+![ss](https://user-images.githubusercontent.com/56082750/123094379-71fce680-d44a-11eb-85ba-1e21567d16a5.png)
