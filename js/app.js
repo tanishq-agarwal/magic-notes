@@ -5,6 +5,7 @@ showNotes();
 let addBtn = document.getElementById('addBtn');
 addBtn.addEventListener("click", function (e) {
     let addTxt = document.getElementById("addTxt");
+    let addTitle = document.getElementById("addTitle");
     let notes = localStorage.getItem("notes");
     if (notes == null) { //on starting there will probably be no notes in localStorage
         notesObj = [];
@@ -12,10 +13,15 @@ addBtn.addEventListener("click", function (e) {
     else {
         notesObj = JSON.parse(notes); //convert notes written in string to array 
     }
-    notesObj.push(addTxt.value);
+    let myObj = {
+        title: addTitle.value,
+        text: addTxt.value
+    }
+    notesObj.push(myObj);
     localStorage.setItem("notes", JSON.stringify(notesObj));//store notes in string in localStorage
     addTxt.value = ""; //After writing text and clicking Add Note button , text will disappear from textarea(becomes empty as it was before to write another note)
     //console.log(notesObj);
+    addTitle.value = "";
     showNotes();
 });
 
@@ -29,11 +35,12 @@ function showNotes() {
     }
     let html = "";
     notesObj.forEach(function (element, index) { //notesObj is an array so we can use for each loop
+        //As notesObj contain array of objects not array of string, we have to give like element.title to read the value.
         html += `
             <div class="noteCard my-2 mx-2 card" style="width: 18rem;">
                     <div class="card-body">
-                        <h5 class="card-title">Note ${index + 1}</h5> 
-                        <p class="card-text"> ${element}</p>
+                        <h5 class="card-title">${element.title}</h5> 
+                        <p class="card-text"> ${element.text}</p>
                         <button id="${index}" onclick="deleteNote(this.id)" class="btn btn-primary">Delete Note</button>
                     </div>
                 </div>`;
@@ -70,8 +77,9 @@ search.addEventListener("input",function(){
     //console.log("Input event fired!", inputVal)
     let noteCards = document.getElementsByClassName('noteCard');
     Array.from(noteCards).forEach(function(element){
+        let cardTitle = element.getElementsByClassName('card-title')[0].innerText;
         let cardTxt = element.getElementsByTagName('p')[0].innerText;
-        if(cardTxt.includes(inputVal)){
+        if(cardTxt.includes(inputVal) || cardTitle.includes(inputVal)){
             element.style.display = "block";
         }
         else{
